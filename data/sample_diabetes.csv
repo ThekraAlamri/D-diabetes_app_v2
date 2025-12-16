@@ -1,0 +1,13 @@
+﻿ID,age,gender,height_cm,weight_kg,bmi,waist_cm,diastolic_bp,systolic_bp,fasting_glucose,random_glucose,choles,hba1c,family_history,smoker,physically_active,has_diabetes,ai_risk_percentage
+P001,45,Male,170,82,28.4,95,85,135,130,210,210,7.2,Yes,No,No,1,86.5
+P002,28,Female,160,55,21.5,70,75,118,92,110,170,5.2,No,No,Yes,0,12.3
+P003,52,Male,172,90,30.4,105,92,148,140,240,230,8.1,Yes,Yes,No,1,92.0
+P004,34,Female,158,62,24.8,78,80,122,105,130,180,5.7,No,No,Yes,0,28.0
+P005,60,Male,168,95,33.7,112,95,155,150,260,250,9.0,Yes,No,No,1,96.0
+P006,40,Female,165,72,26.4,90,88,142,128,190,220,6.8,Yes,No,No,1,75.0
+P007,25,Male,176,68,22.0,76,70,115,90,105,160,5.1,No,No,Yes,0,10.0
+P008,47,Female,162,80,30.5,98,90,145,135,205,240,7.5,Yes,Yes,No,1,88.0
+P009,38,Male,180,78,24.1,85,78,125,98,125,190,5.6,No,No,Yes,0,22.0
+P010,55,Female,159,85,33.6,110,94,150,145,250,260,8.7,Yes,No,No,1,94.0
+P011,31,Male,174,70,23.1,82,76,120,95,120,175,5.3,No,No,Yes,0,15.0
+P012,43,Female,168,74,26.2,92,82,128,110,150,200,6.0,Yes,No,Yes,0,45.0
