@@ -79,7 +79,15 @@ def train_from_csv(base_dir: Path, csv_path: Path, model_name: str):
 def load_or_train_if_missing(base_dir: Path, model_name: str):
     path = model_path(base_dir, model_name)
     if path.exists():
-        return joblib.load(path), str(path)
+    if path.exists():
+        try:
+            return joblib.load(path), str(path)
+        except Exception:
+            # Incompatible/old pickle on Streamlit Cloud -> delete and retrain
+            try:
+                path.unlink()
+            except Exception:
+                pass
 
     sample = base_dir / "data" / "sample_diabetes.csv"
     if sample.exists():
