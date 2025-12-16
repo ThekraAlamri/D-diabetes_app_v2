@@ -1,0 +1,15 @@
+﻿.welcome-box{
+    background:#DFF2E7;
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+div[data-testid="stSidebar"] {
+    padding-top: 18px;
+}
+
+.block-container{
+    padding-top: 22px;
+}
