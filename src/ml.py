@@ -25,6 +25,7 @@ TARGET = "has_diabetes"
 CATEGORICAL = ["gender","family_history","smoker","physically_active"]
 NUMERICAL = [c for c in FEATURES if c not in CATEGORICAL and c != "ID"]
 
+
 def _default_model(model_name: str):
     if model_name == "Logistic Regression":
         return LogisticRegression(max_iter=2000)
@@ -33,6 +34,7 @@ def _default_model(model_name: str):
     if model_name == "SVM":
         return SVC(probability=True, kernel="rbf", C=2.0, gamma="scale")
     raise ValueError("Unknown model")
+
 
 def build_pipeline(model_name: str):
     pre = ColumnTransformer(
@@ -45,10 +47,12 @@ def build_pipeline(model_name: str):
     pipe = Pipeline([("pre", pre), ("clf", clf)])
     return pipe
 
+
 def model_path(base_dir: Path, model_name: str):
     models_dir = base_dir / "models"
     models_dir.mkdir(parents=True, exist_ok=True)
     return models_dir / f"diabetes_{model_name.replace(' ','_').lower()}.joblib"
+
 
 def train_from_csv(base_dir: Path, csv_path: Path, model_name: str):
     df = pd.read_csv(csv_path)
@@ -74,11 +78,17 @@ def train_from_csv(base_dir: Path, csv_path: Path, model_name: str):
     path = model_path(base_dir, model_name)
     joblib.dump(pipe, path)
 
-    return {"accuracy": float(acc), "report": classification_report(y_test, preds, zero_division=0), "model_path": str(path)}
+    return {
+        "accuracy": float(acc),
+        "report": classification_report(y_test, preds, zero_division=0),
+        "model_path": str(path),
+    }
+
 
 def load_or_train_if_missing(base_dir: Path, model_name: str):
     path = model_path(base_dir, model_name)
-    if path.exists():
+
+    # Try load existing model
     if path.exists():
         try:
             return joblib.load(path), str(path)
@@ -89,12 +99,16 @@ def load_or_train_if_missing(base_dir: Path, model_name: str):
             except Exception:
                 pass
 
+    # If missing (or deleted), train from sample if available
     sample = base_dir / "data" / "sample_diabetes.csv"
     if sample.exists():
         train_from_csv(base_dir, sample, model_name)
         return joblib.load(path), str(path)
 
-    raise FileNotFoundError(f"No trained model found at {path}. Upload CSV and train first.")
+    raise FileNotFoundError(
+        f"No trained model found at {path}. Upload CSV and train first."
+    )
+
 
 def predict_page(base_dir: Path):
     st.markdown("<h1 style='text-align:center'>🧪 Predict Diabetes</h1>", unsafe_allow_html=True)
@@ -113,8 +127,12 @@ def predict_page(base_dir: Path):
             if uploaded is None:
                 st.error("Upload a CSV first.")
             else:
-                tmp = base_dir / "data" / "_uploaded_train.csv"
+                data_dir = base_dir / "data"
+                data_dir.mkdir(parents=True, exist_ok=True)
+
+                tmp = data_dir / "_uploaded_train.csv"
                 tmp.write_bytes(uploaded.getvalue())
+
                 res = train_from_csv(base_dir, tmp, model_name)
                 st.success(f"Training done. Accuracy: {res['accuracy']:.3f}")
                 st.text(res["report"])
@@ -230,11 +248,13 @@ def predict_page(base_dir: Path):
                 use_container_width=True
             )
 
+
 def model_info_page(base_dir: Path):
     st.markdown("<h1 style='text-align:center'>ℹ️ Model Info</h1>", unsafe_allow_html=True)
     st.write("Features:")
     st.code(", ".join(FEATURES))
     st.write("Target: has_diabetes (0/1)")
+
 
 def charts_page(base_dir: Path):
     import matplotlib.pyplot as plt
